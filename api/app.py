@@ -136,56 +136,7 @@ def calcular_afinidad_genero(genres_str, categorias_usuario):
     coincidencias = any(g in generos_pelicula for g in categorias_usuario)
     return 1 if coincidencias else 0
 
-# ===========================================================
-# Endpoint principal: recomendaciones personalizadas híbridas
-# ===========================================================
-@app.post("/recomendar")
-def recomendar(preferencias: UserPreferences):
-    """Genera recomendaciones para un nuevo usuario basado en sus gustos (SVD + géneros)"""
-    nuevo_user_id = 999999
 
-    # IDs de las películas favoritas del usuario (para excluirlas)
-    favoritos_ids = movies_df[movies_df['title'].isin(preferencias.favoritos)]['movieId'].tolist()
-
-    resultados = []
-
-    for _, row in movies_df.iterrows():
-        movie_id = row["movieId"]
-        if movie_id in favoritos_ids:
-            continue
-
-        # 🔹 Predicción del modelo SVD
-        pred = model.predict(nuevo_user_id, movie_id).est
-
-        # 🔹 Afinidad de género (basado en las categorías seleccionadas)
-        afinidad = calcular_afinidad_genero(row["genres"], preferencias.categorias)
-
-        # 🔹 Cálculo del puntaje final híbrido
-        score_final = (0.7 * pred) + (0.3 * afinidad)
-
-        resultados.append({
-            "titulo": row["title"],
-            "prediccion_svd": round(pred, 3),
-            "afinidad_genero": afinidad,
-            "puntaje_final": round(score_final, 3)
-        })
-
-    # 🔹 Ordenar por el puntaje final combinado
-    resultados_ordenados = sorted(resultados, key=lambda x: x["puntaje_final"], reverse=True)[:preferencias.top_n]
-
-    return {
-        "email": preferencias.email,
-        "recomendaciones": resultados_ordenados
-    }
-
-# ===========================================================
-# Endpoint secundario: obtener lista de películas
-# ===========================================================
-@app.get("/peliculas")
-def obtener_peliculas(limit: int = 100):
-    """Envía una lista de películas para mostrar en el frontend"""
-    sample = movies_df.sample(limit, random_state=42)
-    return sample.to_dict(orient="records")
 
 # ===========================================================
 # Endpoint OMDb + SVD + Afinidad de géneros (VERSIÓN FINAL)
