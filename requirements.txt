@@ -1,14 +1,9 @@
-# 🛠️ HERRAMIENTAS ESENCIALES (PRIMERO)
-setuptools==65.5.0
-wheel==0.38.4
-pip==23.0.1
-
-# 📦 DEPENDENCIAS PRINCIPALES
+# 🚀 VERSIONES COMPATIBLES CON PYTHON 3.11
 fastapi==0.104.1
 uvicorn==0.24.0
 python-dotenv==1.0.0
 
-# 🔢 CIENCIA DE DATOS (VERSIONES COMPROBADAS)
+# 📊 CIENCIA DE DATOS
 numpy==1.24.3
 pandas==1.5.3
 scikit-learn==1.2.2
@@ -17,5 +12,6 @@ scikit-surprise==1.1.3
 # 📧 EMAIL
 mailjet-rest==1.3.4
 
-# ⚡ COMPATIBILIDAD
-joblib==1.2.0
+# 🛠️ HERRAMIENTAS
+setuptools==65.5.0
+wheel==0.38.4
